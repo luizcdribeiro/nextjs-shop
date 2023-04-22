@@ -6,7 +6,7 @@ import { GetStaticProps } from "next";
 import { HomerContainer } from "@/styles/pages/home";
 import 'keen-slider/keen-slider.min.css';
 import { ProductsProps } from "@/interfaces/products";
-import ProductItem from "@/components/Products";
+import ProductItem from "@/components/Product";
 
 export default function Home({ products }: ProductsProps) {
 
