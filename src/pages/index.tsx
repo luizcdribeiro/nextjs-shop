@@ -1,28 +1,14 @@
-import Image from "next/image";
 import { useKeenSlider } from 'keen-slider/react';
 import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 import { GetStaticProps } from "next";
 
-import { HomerContainer, Product } from "@/styles/pages/home";
-
+import { HomerContainer } from "@/styles/pages/home";
 import 'keen-slider/keen-slider.min.css';
+import { ProductsProps } from "@/interfaces/products";
+import ProductItem from "@/components/Products";
 
-import camiseta1 from '../assets/camisetas/01.png'
-import camiseta2 from '../assets/camisetas/02.png'
-import camiseta3 from '../assets/camisetas/03.png'
-import Stripe from "stripe";
-
-interface HomeProps {
-  products: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: number;
-  }[]
-}
-
-
-export default function Home({ products }: HomeProps) {
+export default function Home({ products }: ProductsProps) {
 
   const [sliderRef] = useKeenSlider({
     slides: {
@@ -35,13 +21,14 @@ export default function Home({ products }: HomeProps) {
     <HomerContainer ref={sliderRef} className="keen-slider">
       {products.map(product => {
         return (
-          <Product className="keen-slider__slide" key={product.id}>
-            <Image src={product.imageUrl} alt={product.name} width={520} height={480} />
-            <footer>
-              <strong>{product.name}</strong>
-              <span>{product.price}</span>
-            </footer>
-          </Product>
+          <ProductItem
+          id={product.id}
+          imageUrl={product.imageUrl}
+          name={product.name}
+          key={product.id} 
+          price={product.price}
+          carouselClass="keen-slider__slide"
+          />
         )
       })}      
     </HomerContainer>
@@ -62,13 +49,17 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: price.unit_amount as number / 100,
+      price: new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(price.unit_amount as number / 100),
     }
   })
 
   return {
     props: {
       products,
-    }
+    },
+    revalidate: 60 * 60 * 2, // 2 horas
   }
 }
