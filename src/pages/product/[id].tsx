@@ -1,29 +1,42 @@
-import { ProductProps } from "@/interfaces/products";
+import {  ProductPropsItems } from "@/interfaces/products";
 import { stripe } from "@/lib/stripe";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
-import { GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import Stripe from "stripe";
 
-export default function Product({id, imageUrl, name, price, description}: ProductProps) {
+export default function Product({product}: ProductPropsItems) {
 
+  const { isFallback } = useRouter()
+
+  if(isFallback) {
+    return <h1>Loading...</h1>
+  }
 
   return(
     <ProductContainer>
       <ImageContainer>
-        <Image src={imageUrl} alt={name} width={520} height={480} />
+        <Image src={product.imageUrl} alt={product.name} width={520} height={480} />
       </ImageContainer>
 
       <ProductDetails>
-        <h1>{name}</h1>
-        <span>{price}</span>
+        <h1>{product.name}</h1>
+        <span>{product.price}</span>
 
-        <p>{description}</p>
+        <p>{product.description}</p>
 
         <button>Comprar agora</button>
       </ProductDetails>
     </ProductContainer>
   )
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  }
 }
 
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
@@ -33,6 +46,8 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
   const product = await stripe.products.retrieve(productId, {
     expand: ['default_price']
   });
+
+  await new Promise(resolve => setTimeout(resolve, 2000))
 
   const price = product.default_price as Stripe.Price;
 

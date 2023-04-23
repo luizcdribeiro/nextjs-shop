@@ -15,3 +15,15 @@ export interface ProductProps {
   carouselClass?: string;
   description?: string;
 }
+
+export interface ProductPropsItems {
+  product: {
+    id: string;
+    name: string;
+    imageUrl: string;
+    price: string;
+    carouselClass?: string;
+    description?: string;
+
+  }
+}
