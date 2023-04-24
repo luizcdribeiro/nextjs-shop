@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
 
-export default function Product({product}: ProductPropsItems) {
+export default function Product({ product }: ProductPropsItems) {
 
   const { isFallback } = useRouter()
 
@@ -62,7 +62,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
           currency: 'BRL'
         }).format(price.unit_amount as number / 100),
         description: product.description,
-        
+        defaultPriceId: price.id,
       }
     },
     revalidate: 60 * 60 * 1, // 1 hora

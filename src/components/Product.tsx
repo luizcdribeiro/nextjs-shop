@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function ProductItem({ id, imageUrl, name, price, carouselClass }: ProductProps) {
 
   return (
-    <Link key={id} href={`/product/${id}`}>
+    <Link key={id} href={`/product/${id}`} prefetch={false}>
       <Product className={`${carouselClass}`}>
         <Image src={imageUrl} alt={name} width={520} height={480} />
         <footer>

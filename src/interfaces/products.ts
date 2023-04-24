@@ -24,6 +24,7 @@ export interface ProductPropsItems {
     price: string;
     carouselClass?: string;
     description?: string;
+    defaultPriceId?: string;
 
   }
 }
