@@ -11,7 +11,7 @@ export interface ProductProps {
   id: string;
   name: string;
   imageUrl: string;
-  price: string;
+  price: number;
   carouselClass?: string;
   description?: string;
 }

@@ -2,6 +2,7 @@ import { useKeenSlider } from 'keen-slider/react';
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 import { GetStaticProps } from "next";
+import Head from 'next/head'
 
 import { HomerContainer } from "@/styles/pages/home";
 import 'keen-slider/keen-slider.min.css';
@@ -18,20 +19,27 @@ export default function Home({ products }: ProductsProps) {
   })
 
   return (
-    <HomerContainer ref={sliderRef} className="keen-slider">
-      {products.map(product => {
-        return (
-          <ProductItem
-          id={product.id}
-          imageUrl={product.imageUrl}
-          name={product.name}
-          key={product.id} 
-          price={product.price}
-          carouselClass="keen-slider__slide"
-          />
-        )
-      })}      
-    </HomerContainer>
+    <>
+      <Head>
+        <title>Home | Nextjs Shop</title>
+      </Head>
+      <HomerContainer ref={sliderRef} className="keen-slider">
+      
+        {products.map(product => {
+          return (
+            <ProductItem
+              id={product.id}
+              imageUrl={product.imageUrl}
+              name={product.name}
+              key={product.id} 
+              price={product.price}
+              carouselClass="keen-slider__slide"
+            />
+          )
+        })}      
+      </HomerContainer>
+    
+    </>
   )
 }
 
